@@ -18,16 +18,15 @@ class PhotoFactory extends Factory
      */
     public function definition(): array
     {
-         $width = fake()->numberBetween(300, 800);
+        $width = fake()->numberBetween(300, 800);
         $height = fake()->numberBetween(300, 800);
         $category = fake()->unique()->numberBetween(1, 1000);
 
-        $imageUrl = "https://picsum.photos/{$width}/{$height}?random={$category}";
+        $imageUrl = "https://picsum.photos/seed/photo-$category/{$width}/{$height}";
         return [
-            'username' => \App\Models\User::factory(),
+            'user_id' => \App\Models\User::factory(),
             'url' => $imageUrl,
             'caption' => fake()->sentence(),
-            'is_public' => true,
             'is_path' => true,
         ];
     }
