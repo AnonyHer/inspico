@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('avatar')->default('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y');
+            $table->boolean('is_path_avatar')->default('false');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

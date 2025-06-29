@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('username')->constrained(
+            $table->foreignId('user_id')->constrained(
                 'users',
                 'id'
             );
-            $table->boolean('is_public')->default(true);
-            $table->boolean('is_path')->default(true);
+            $table->boolean('is_path')->default(false);
             $table->string('caption')->nullable();
             $table->string('url');
             $table->timestamps();
