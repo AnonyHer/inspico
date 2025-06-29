@@ -14,23 +14,56 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <body class="font-sans antialiased bg-gray-100">
+        @include('layouts.navigation')
+        <!-- Page Content -->
+        <main>
+            @yield('content')
+        </main>
+        <script>
+            const dropzone = document.getElementById('dropzone');
+            const input = document.getElementById('imageInput');
+            const preview = document.getElementById('imagePreview');
+            const dropText = document.getElementById('dropText');
 
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+            dropzone.addEventListener('click', () => input.click());
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
+            input.addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    showPreview(this.files[0]);
+                }
+            });
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, e => e.preventDefault());
+                dropzone.addEventListener(eventName, e => e.stopPropagation());
+            });
+
+            dropzone.addEventListener('dragover', () => dropzone.classList.add('border-blue-500'));
+            dropzone.addEventListener('dragleave', () => dropzone.classList.remove('border-blue-500'));
+
+            dropzone.addEventListener('drop', e => {
+                dropzone.classList.remove('border-blue-500');
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    input.files = e.dataTransfer.files;
+                    showPreview(file);
+                }
+            });
+
+            function showPreview(file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    dropText.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        </script>
+
+
+
+
     </body>
 </html>
