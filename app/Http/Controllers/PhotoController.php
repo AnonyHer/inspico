@@ -12,7 +12,11 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        
+        // Fetch all photos from the database
+        $photos = Photo::all();
+
+        // Return a view with the photos
+        return view('index')->with('photos', $photos); 
     }
 
     /**
@@ -20,7 +24,8 @@ class PhotoController extends Controller
      */
     public function create()
     {
-        //
+        // Return a view to create a new photo
+        return view('upload');
     }
 
     /**
@@ -36,7 +41,8 @@ class PhotoController extends Controller
      */
     public function show(Photo $photo)
     {
-        //
+        // Return a view with the specific photo
+        return view('detailPhoto')->with('photo', $photo);
     }
 
     /**

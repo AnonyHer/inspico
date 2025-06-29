@@ -23,8 +23,12 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $random = fake()->numberBetween(1, 70);
+        $avatarUrl = "https://i.pravatar.cc/150?img=$random";
+
         return [
             'name' => fake()->name(),
+            'avatar' => $avatarUrl,
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
