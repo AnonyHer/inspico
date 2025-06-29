@@ -21,6 +21,13 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function show(Request $request): View
+    {
+        return view('profile.show', [
+            'user' => $request->user(),
+        ]);
+    }
+
     /**
      * Update the user's profile information.
      */
@@ -32,9 +39,18 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('avatars', $filename, 'public');
+
+            $url = '/storage/' . $path;   // hasil: /storage/avatars/xyz.jpg
+            $isPath = true;
+        }
+
         $request->user()->save();
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return Redirect::route('users.show', auth()->user()->id)->with('status', 'profile-updated');
     }
 
     /**
