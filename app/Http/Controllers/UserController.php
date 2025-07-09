@@ -20,7 +20,14 @@ class UserController extends Controller
     }
     public function show(User $user)
     {
-        // Return a view with the user's photos
-        return view('profile.show', compact('user'));
+        $photoCount    = $user->photos()->count();
+        $likeCount     = $user->likesReceived()->count();
+        $followerCount = $user->followers()->count();
+
+        return view('profile.show', [
+            'user' => $user,
+            'likeCount' => $likeCount,
+            'followerCount' => $followerCount,
+        ]);
     }
 }

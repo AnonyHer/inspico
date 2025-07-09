@@ -42,3 +42,71 @@
         Follow
     </button>
 </div>
+
+@props(['user'])
+<div>
+    <a href="{{ route('users.show', $user->id) }}">
+    <div class="rounded-t-xl shadow-md bg-white overflow-hidden hover:shadow-xl transition duration-300 ease-in-out group z-10">
+        
+        {{-- Ini adalah link transparan ke profil --}}
+    
+        <div class="p-4 text-center pointer-events-none">
+            {{-- Foto-foto user --}}
+            <div class="flex justify-center space-x-1 overflow-hidden mb-3">
+                @foreach ($user->photos->take(4) as $photo)
+                    <img src="{{ $photo->is_path ? asset($photo->url) : $photo->url }}" 
+                         class="w-1/4 h-12 object-cover rounded pointer-events-none">
+                @endforeach
+            </div>
+    
+            {{-- Avatar --}}
+            <img src="{{ $user->is_path_avatar ? asset($user->avatar) : $user->avatar }}"
+                 class="w-16 h-16 rounded-full mx-auto border-2 border-white -mt-8 pointer-events-none">
+    
+            {{-- Nama --}}
+            <h3 class="mt-2 font-semibold text-lg text-gray-800 pointer-events-none">{{ $user->name }}</h3>
+    
+            {{-- Stat dinamis --}}
+            <div class="text-sm text-gray-600 flex justify-center space-x-6 mt-1 pointer-events-none">
+                <div>
+                    <div class="font-semibold">{{ $user->photos()->count() }}</div>
+                    <div class="text-xs">Photos</div>
+                </div>
+                <div>
+                    <div class="font-semibold">{{ $user->followers()->count() }}</div>
+                    <div class="text-xs">Followers</div>
+                </div>
+                <div>
+                    <div class="font-semibold">{{ $user->likesReceived()->count() }}</div>
+                    <div class="text-xs">Likes</div>
+                </div>
+            </div>
+    
+        </div>
+    </div>
+</a>
+{{-- Tombol Follow --}}
+@auth
+    @if(auth()->id() !== $user->id)
+        <form method="POST" action="{{ route('users.follow', $user->id) }}" class=" pointer-events-auto">
+            @csrf
+            @if(auth()->user()->following->contains($user))
+                <button class="bg-white border-2 border-black text-black px-6 py-2 rounded-b-xl w-full hover:bg-gray-100 transition">
+                    Unfollow
+                </button>
+            @else
+                <button class="bg-black text-white px-6 py-2 rounded-b-xl w-full hover:bg-gray-800 transition">
+                    Follow
+                </button>
+            @endif
+        </form>
+    @else
+        <a href="">
+            <div class="bg-black text-white px-6 py-2 rounded-b-xl text-center w-full hover:bg-gray-800 transition">
+                View Profile
+            </div>
+        </a>
+    @endif
+@endauth
+</div>
+
